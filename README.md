@@ -1,8 +1,16 @@
 # CometPlatform Toolkit
 
-[![Latest Release](https://img.shields.io/github/v/release/muracciolei/CometPlatformToolkit?label=Latest%20Release&color=blue)](https://github.com/muracciolei/CometPlatformToolkit/releases/latest)
-[![Platform](https://img.shields.io/badge/Platform-Web-green.svg)](https://github.com/muracciolei/CometPlatformToolkit)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Latest Release](https://img.shields.io/github/v/release/muracciolei/CometPlatformToolkit?label=Latest%20Release&color=blue&style=for-the-badge)](https://github.com/muracciolei/CometPlatformToolkit/releases/latest)
+[![Platform](https://img.shields.io/badge/Platform-Web-green.svg?style=for-the-badge)](https://github.com/muracciolei/CometPlatformToolkit)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+<div align="center">
+
+## 🚀 [**DOWNLOAD LATEST RELEASE v1.0.0**](https://github.com/muracciolei/CometPlatformToolkit/releases/latest) 🚀
+
+*Click above to download the latest stable release*
+
+</div>
 
 **A modular web development platform designed for AI agent automation, workflow orchestration, and collaborative development.**
 
@@ -202,7 +210,22 @@ MIT License - See [LICENSE](LICENSE) file for details.
 
 ## 🏷️ Latest Release
 
-**[📦 Download Latest Release](https://github.com/muracciolei/CometPlatformToolkit/releases/latest)**
+<div align="center">
+
+### 📦 [**DOWNLOAD v1.0.0 - STABLE RELEASE**](https://github.com/muracciolei/CometPlatformToolkit/releases/latest) 📦
+
+**Ready-to-use CometPlatform Toolkit with all modules included**
+
+[![Download](https://img.shields.io/github/downloads/muracciolei/CometPlatformToolkit/v1.0.0/total?style=for-the-badge&color=green)](https://github.com/muracciolei/CometPlatformToolkit/releases/v1.0.0)
+
+</div>
+
+### What's included in v1.0.0:
+- ✅ **8 Complete Modules**: AI Supervisor, API Tester, Code Editor, File Manager, Terminal, Event Bus, Plugin Manager, Agent Memory
+- ✅ **Security-First Design**: Comprehensive sandboxing and supervision
+- ✅ **Agent Automation Ready**: Optimized for AI agent workflows
+- ✅ **Complete Documentation**: Setup guides, API docs, and examples
+- ✅ **Zero Dependencies**: Run with just Python's built-in HTTP server
 
 ---
 
