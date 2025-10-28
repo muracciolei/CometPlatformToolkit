@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Comet Platform</title>
+    <style>
+      body { font-family: system-ui, sans-serif; background:#111; color:#ddd; }
+      #ai-supervisor-console button { background:#2d2d2d; color:#ddd; border:1px solid #444; padding:6px 10px; border-radius:4px; cursor:pointer; }
+      #ai-supervisor-console button:hover { background:#3a3a3a; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h2>Comet Platform</h2>
+      <div id="app"></div>
+      <!-- ai-supervisor console injected dynamically -->
+    </main>
+    <script>
+      // expose supervisor state for main.js summary binding
+      window.__AI_SUP_STATE__ = window.__AI_SUP_STATE__ || { recommendations: [], applied: [], archived: [] };
+    </script>
+  </body>
+</html>

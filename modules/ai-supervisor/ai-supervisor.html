@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Supervisor</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background:#0b0f14; color:#e6edf3; }
+    .container { display:flex; gap:16px; padding:12px; }
+    .panel { flex:1; background:#101622; border:1px solid #1f2a3a; border-radius:8px; overflow:hidden; }
+    .header { padding:10px 12px; border-bottom:1px solid #1f2a3a; background:#0d1320; display:flex; align-items:center; justify-content:space-between; }
+    .title { font-weight:600; }
+    #ai-supervisor-timeline { max-height: 60vh; overflow:auto; padding:12px; }
+    .timeline .row { display:flex; gap:8px; align-items:flex-start; border-bottom:1px dashed #253249; padding:6px 0; }
+    .timeline .t { width:84px; color:#8b949e; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .evt { color:#c9d1d9; }
+    .appr { color:#7ee787; }
+    .rb { color:#ff7b72; }
+    .ins { color:#79c0ff; }
+    .ins.temporal { color:#d2a8ff; }
+    .ins.policy { color:#7ee787; }
+    .ins.recommendation { color:#79c0ff; }
+    #ai-supervisor-policy { padding:12px; display:flex; flex-direction:column; gap:10px; }
+    #ai-supervisor-policy input[type="text"], #ai-supervisor-policy input[type="number"] { width:100%; padding:8px; border-radius:6px; border:1px solid #26344a; background:#0b1422; color:#e6edf3; }
+    #ai-supervisor-policy label { display:block; margin-bottom:4px; color:#9fb0c1; }
+    #ai-supervisor-policy button { padding:8px 12px; background:#1f6feb; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+    .footer { padding:10px 12px; border-top:1px solid #1f2a3a; display:flex; gap:8px; align-items:center; }
+    .btn { padding:6px 10px; border:1px solid #2b3a55; border-radius:6px; background:transparent; color:#e6edf3; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="panel">
+      <div class="header">
+        <div class="title">Timeline View</div>
+        <div>
+          <button class="btn" id="demo-seed">Seed Demo</button>
+          <button class="btn" id="refresh">Refresh</button>
+        </div>
+      </div>
+      <div id="ai-supervisor-timeline"></div>
+      <div class="footer">
+        <small>Shows actions, approvals, rollbacks, and insights in chronological order.</small>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="header"><div class="title">Policy Settings</div></div>
+      <div id="ai-supervisor-policy"></div>
+      <div class="footer">
+        <small>Adjust auto-approval and temporal analysis windows. Sandbox: no network calls.</small>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Lightweight bootstrap: ensure render after load
+    (function(){
+      function init(){
+        if(!window.CometSupervisor){ return setTimeout(init, 200); }
+        if(document.getElementById('demo-seed')){
+          document.getElementById('demo-seed').onclick = function(){
+            try{ window.CometSupervisor.__demo(); }catch(e){}
+          };
+        }
+        if(document.getElementById('refresh')){
+          document.getElementById('refresh').onclick = function(){
+            try{ window.CometSupervisor.onChange(()=>{}); }catch(e){}
+          };
+        }
+        try{ window.CometSupervisor.onChange(()=>{}); }catch(e){}
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>

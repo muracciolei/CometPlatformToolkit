@@ -1,0 +1,36 @@
+{
+  "name": "comet-platform-toolkit",
+  "version": "1.0.0",
+  "description": "A modular web development platform designed for AI agent automation, workflow orchestration, and collaborative development",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "cd public && python -m http.server 8000",
+    "dev": "cd public && python -m http.server 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muracciolei/CometPlatformToolkit.git"
+  },
+  "keywords": [
+    "ai-agents",
+    "automation",
+    "workflow-orchestration",
+    "modular-architecture",
+    "web-platform",
+    "plugin-system",
+    "sandboxed-execution",
+    "agent-supervision"
+  ],
+  "author": "CometPlatform Contributors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/muracciolei/CometPlatformToolkit/issues"
+  },
+  "homepage": "https://github.com/muracciolei/CometPlatformToolkit#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "python": ">=3.8"
+  }
+}

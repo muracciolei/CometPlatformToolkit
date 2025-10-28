@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CometPlatform - API Tester</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 0; }
+    .container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
+    .panel { border: 1px solid #6663; border-radius: 8px; padding: 12px; }
+    .panel h2 { margin: 0 0 8px 0; font-size: 16px; }
+    label { display: block; margin: 8px 0 4px; font-weight: 600; }
+    input[type="text"], select, textarea { width: 100%; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #8884; background: transparent; color: inherit; }
+    textarea { min-height: 120px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .row { display: grid; grid-template-columns: 140px 1fr; gap: 8px; align-items: center; }
+    .actions { display: flex; gap: 8px; align-items: center; }
+    button { padding: 8px 12px; border-radius: 6px; border: 1px solid #8884; background: #2d6cdf; color: white; cursor: pointer; }
+    button.secondary { background: transparent; color: inherit; }
+    .response { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #00000008; padding: 8px; border-radius: 6px; max-height: 50vh; overflow: auto; }
+    .kv { display: grid; grid-template-columns: 1fr; gap: 6px; }
+    .note { font-size: 12px; opacity: 0.8; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 999px; background: #8882; font-size: 12px; margin-left: 6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="panel">
+      <h2>API Request</h2>
+      <div class="row">
+        <label for="method">Method</label>
+        <select id="method">
+          <option>GET</option>
+          <option>POST</option>
+          <option>PUT</option>
+          <option>DELETE</option>
+          <option>PATCH</option>
+          <option>HEAD</option>
+          <option>OPTIONS</option>
+        </select>
+      </div>
+      <label for="url">URL <span class="badge" id="allowedBadge" title="Only whitelisted domains allowed"></span></label>
+      <input id="url" type="text" placeholder="https://jsonplaceholder.typicode.com/posts/1" />
+
+      <label for="headers">Headers (JSON)</label>
+      <textarea id="headers" placeholder='{"Content-Type":"application/json"}'></textarea>
+
+      <label for="body">Body</label>
+      <textarea id="body" placeholder='{"title":"foo","body":"bar","userId":1}'></textarea>
+
+      <div class="actions">
+        <button id="send">Send</button>
+        <button id="clear" class="secondary" type="button">Clear</button>
+        <button id="historyBtn" class="secondary" type="button">History</button>
+      </div>
+      <p class="note">Requests restricted to approved domains. All actions are logged and supervised.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Response</h2>
+      <div id="meta" class="kv"></div>
+      <h3>Status</h3>
+      <div id="status" class="response"></div>
+      <h3>Headers</h3>
+      <div id="respHeaders" class="response"></div>
+      <h3>Body</h3>
+      <div id="respBody" class="response"></div>
+    </section>
+  </div>
+
+  <script>
+    // Bridge to APITester module loaded globally
+    function uiLog(msg, level='info'){ try{ (window.APITester?.logActivity||console.log)(msg, level);}catch(e){console.log(msg);} }
+
+    function setAllowedBadge(){
+      const badge = document.getElementById('allowedBadge');
+      const domains = window.APITester?.getAllowedDomains?.() || [];
+      badge.textContent = domains.length ? `Allowed: ${domains.join(', ')}` : 'Allowed list unavailable';
+    }
+
+    function formatHeaders(obj){
+      try { return JSON.stringify(obj, null, 2); } catch { return String(obj); }
+    }
+    function formatBody(body){
+      try { return typeof body === 'string' ? body : JSON.stringify(body, null, 2); } catch { return String(body); }
+    }
+
+    async function handleSend(){
+      const url = document.getElementById('url').value.trim();
+      const method = document.getElementById('method').value.trim();
+      const headers = document.getElementById('headers').value;
+      const body = document.getElementById('body').value;
+
+      // Pre-validation and supervision
+      if (!window.APITester) { uiLog('APITester module not loaded', 'error'); return; }
+      if (!window.APITester.isUrlAllowed(url)) {
+        uiLog('Blocked request to non-allowed URL', 'error');
+        alert('URL not allowed by supervisor policy.');
+        return;
+      }
+
+      try {
+        uiLog(`UI sending request: ${method} ${url}`);
+        const result = await window.APITester.sendRequest(url, method, headers, body);
+
+        // Update UI with response
+        document.getElementById('meta').innerText = `Request ID: ${result.requestId} \nDuration: ${result.duration}ms \nTime: ${result.timestamp}`;
+        document.getElementById('status').innerText = `${result.response.status} ${result.response.statusText}`;
+        document.getElementById('respHeaders').innerText = formatHeaders(result.response.headers);
+        document.getElementById('respBody').innerText = formatBody(result.response.body);
+
+        // Trigger integration hook for formatted data
+        window.APITester?.registerHook && window.APITester?.logActivity('UI updated with response', 'info');
+      } catch (e) {
+        document.getElementById('meta').innerText = '';
+        document.getElementById('status').innerText = `Error`;
+        document.getElementById('respHeaders').innerText = '';
+        document.getElementById('respBody').innerText = e?.message || String(e);
+      }
+    }
+
+    function handleClear(){
+      document.getElementById('headers').value = '';
+      document.getElementById('body').value = '';
+      document.getElementById('status').innerText = '';
+      document.getElementById('respHeaders').innerText = '';
+      document.getElementById('respBody').innerText = '';
+      document.getElementById('meta').innerText = '';
+    }
+
+    function handleHistory(){
+      const hist = window.APITester?.getRequestHistory?.() || [];
+      const lines = hist.map(h => {
+        const s = h.response ? `${h.response.status}` : 'ERR';
+        return `${h.timestamp || ''} ${h.requestId || ''} ${h.request?.method || ''} ${h.request?.url || ''} => ${s}`;
+      }).join('\n');
+      alert(lines || 'No history yet.');
+    }
+
+    // Wire events
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('send').addEventListener('click', handleSend);
+      document.getElementById('clear').addEventListener('click', handleClear);
+      document.getElementById('historyBtn').addEventListener('click', handleHistory);
+      setAllowedBadge();
+      uiLog('API Tester UI initialized');
+    });
+  </script>
+  <script src="./api-tester.js"></script>
+</body>
+</html>

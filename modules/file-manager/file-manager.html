@@ -1,0 +1,43 @@
+<!-- File Manager UI -->
+<section id="file-manager" class="comet-file-manager">
+  <header class="fm-header">
+    <h2>File Manager</h2>
+    <div class="fm-actions">
+      <button data-action="create-file" title="Create File">+ File</button>
+      <button data-action="create-folder" title="Create Folder">+ Folder</button>
+      <button data-action="rename" title="Rename">Rename</button>
+      <button data-action="delete" title="Delete">Delete</button>
+    </div>
+  </header>
+  <div class="fm-body">
+    <nav data-role="tree" class="fm-tree" aria-label="Project files and folders"></nav>
+    <aside class="fm-help">
+      <p>Select an item to rename or delete. Double-click a file to open in the editor.</p>
+      <p>All operations are sandboxed within comet-platform/ and fully logged.</p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .comet-file-manager { font-family: var(--vscode-font-family, ui-sans-serif); padding: 8px; }
+  .fm-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .fm-actions button { margin-right:6px; }
+  .fm-body { display:flex; gap:16px; margin-top:8px; }
+  .fm-tree { flex: 1 1 auto; max-height: 60vh; overflow:auto; border: 1px solid #ddd; padding: 8px; }
+  .fm-list { list-style:none; padding-left:0; margin:0; }
+  .fm-item { padding:4px 6px; cursor:pointer; }
+  .fm-item.dir { font-weight:600; }
+  .fm-item.selected { background: rgba(100,149,237,0.2); }
+  .fm-help { width: 260px; font-size: 12px; color: #666; }
+</style>
+
+<script>
+  // Ensure JS module is available and initialize
+  if (window.CometFileManager && typeof window.CometFileManager.initUI === 'function') {
+    window.CometFileManager.initUI();
+  } else {
+    window.addEventListener('comet-file-manager-ready', () => {
+      window.CometFileManager?.initUI?.();
+    });
+  }
+</script>
